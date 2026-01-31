@@ -1,0 +1,50 @@
+2026-01-31 20:19:19,010 - INFO - Face Anti-Spoofing Web Application Started
+2026-01-31 20:19:19,028 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.100.8:5000
+2026-01-31 20:19:19,028 - INFO - [33mPress CTRL+C to quit[0m
+2026-01-31 20:19:22,199 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:22] "GET / HTTP/1.1" 200 -
+2026-01-31 20:19:22,214 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:22] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:22,232 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:22] "GET /logs HTTP/1.1" 200 -
+2026-01-31 20:19:23,217 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:23] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:24,214 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:24] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:25,217 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:25] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:26,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:26] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:27,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:27] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:27,237 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:27] "GET /logs HTTP/1.1" 200 -
+2026-01-31 20:19:28,213 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:28] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:29,215 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:29] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:30,215 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:30] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:31,215 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:31] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:32,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:32] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:32,238 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:32] "GET /logs HTTP/1.1" 200 -
+2026-01-31 20:19:33,213 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:33] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:34,213 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:34] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:35,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:35] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:36,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:36] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:37,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:37] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:37,242 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:37] "GET /logs HTTP/1.1" 200 -
+2026-01-31 20:19:38,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:38] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:38,653 - WARNING - Spoof detected - Reason: Insufficient blinks, Low motion - Image saved: spoof_images\spoof_20260131_201938_642519.jpg
+2026-01-31 20:19:38,653 - WARNING - Status changed to SPOOF DETECTED
+2026-01-31 20:19:38,660 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:38] "GET /video_feed HTTP/1.1" 200 -
+2026-01-31 20:19:39,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:39] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:40,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:40] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:40,471 - INFO - Blink detected! Total blinks: 1
+2026-01-31 20:19:40,905 - INFO - Blink detected! Total blinks: 2
+2026-01-31 20:19:40,906 - INFO - Status changed to REAL PERSON
+2026-01-31 20:19:41,217 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:41] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:42,087 - INFO - Blink detected! Total blinks: 3
+2026-01-31 20:19:42,214 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:42] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:42,241 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:42] "GET /logs HTTP/1.1" 200 -
+2026-01-31 20:19:43,215 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:43] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:43,489 - INFO - Blink detected! Total blinks: 4
+2026-01-31 20:19:44,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:44] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:45,215 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:45] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:46,216 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:46] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:46,572 - INFO - Blink detected! Total blinks: 5
+2026-01-31 20:19:47,217 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:47] "GET /stats HTTP/1.1" 200 -
+2026-01-31 20:19:47,239 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:47] "GET /logs HTTP/1.1" 200 -
+2026-01-31 20:19:47,519 - INFO - Blink detected! Total blinks: 6
+2026-01-31 20:19:48,334 - INFO - 127.0.0.1 - - [31/Jan/2026 20:19:48] "GET /stats HTTP/1.1" 200 -
