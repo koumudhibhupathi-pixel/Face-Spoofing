@@ -1,5 +1,7 @@
 Flask==3.0.0
-opencv-python-headless==4.8.1.78
-numpy==1.24.3
+opencv-python-headless==4.10.0.84
+numpy==1.26.4
 gunicorn==21.2.0
-Werkzeug==3.0.0
+Werkzeug==3.0.1
+setuptools==69.0.3
+wheel==0.42.0
