@@ -1,208 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Face Anti-Spoofing System</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    margin: 0;
-    padding: 20px;
-    color: white;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.main {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-}
-
-.card {
-    background: white;
-    color: black;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-video {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.status-box {
-    margin-bottom: 20px;
-}
-
-.status-value {
-    font-size: 1.8em;
-    font-weight: bold;
-}
-
-.real {
-    color: green;
-}
-
-.spoof {
-    color: red;
-}
-
-.waiting {
-    color: orange;
-}
-
-.stat {
-    margin-top: 10px;
-    font-size: 1.1em;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.reset-btn {
-    background: crimson;
-    color: white;
-}
-
-@media(max-width:768px){
-    .main {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-    <h1>🔒 Face Anti-Spoofing System</h1>
-
-    <div class="main">
-
-        <!-- CAMERA SECTION -->
-        <div class="card">
-            <h2>📹 Live Camera</h2>
-            <video id="video" autoplay playsinline></video>
-            <canvas id="canvas" style="display:none;"></canvas>
-        </div>
-
-        <!-- STATUS PANEL -->
-        <div class="card">
-            <h2>📊 Detection Status</h2>
-
-            <div class="status-box">
-                <div>Status:</div>
-                <div id="status-display" class="status-value waiting">
-                    WAITING
-                </div>
-            </div>
-
-            <div class="stat">👁 Total Blinks: <span id="total-blinks">0</span></div>
-            <div class="stat">⏱ Recent Blinks: <span id="recent-blinks">0</span></div>
-            <div class="stat">✅ Real Count: <span id="real-count">0</span></div>
-            <div class="stat">🚨 Spoof Count: <span id="spoof-count">0</span></div>
-            <div class="stat">⏳ Session: <span id="session-time">0</span>s</div>
-
-            <button class="reset-btn" onclick="resetSystem()">Reset</button>
-        </div>
-
-    </div>
-</div>
-
-<script>
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const statusDisplay = document.getElementById('status-display');
-
-// Access browser camera
-navigator.mediaDevices.getUserMedia({ video: true })
-.then(stream => {
-    video.srcObject = stream;
-})
-.catch(err => {
-    alert("Camera access denied!");
-});
-
-// Send frame every 1 second
-setInterval(() => {
-
-    if (!video.videoWidth) return;
-
-    const context = canvas.getContext('2d');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0);
-
-    const imageData = canvas.toDataURL('image/jpeg');
-
-    fetch('/process_frame', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageData })
-    })
-    .then(response => response.json())
-    .then(data => {
-
-        statusDisplay.innerText = data.status;
-
-        if (data.status === "REAL PERSON") {
-            statusDisplay.className = "status-value real";
-        } else if (data.status === "SPOOF DETECTED") {
-            statusDisplay.className = "status-value spoof";
-        } else {
-            statusDisplay.className = "status-value waiting";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Anti-Spoofing System (Cloud)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        document.getElementById('total-blinks').innerText = data.total_blinks;
-        document.getElementById('recent-blinks').innerText = data.recent_blinks;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-        updateStats();
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    });
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
 
-}, 1000);
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
 
-// Update additional stats
-function updateStats() {
-    fetch('/stats')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('real-count').innerText = data.real_count;
-        document.getElementById('spoof-count').innerText = data.spoof_count;
-        document.getElementById('session-time').innerText = data.session_duration;
-    });
-}
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
+        #video {
+            width: 100%;
+            border-radius: 10px;
+            transform: scaleX(-1); /* Mirror video */
+        }
 
-// Reset
-function resetSystem() {
-    fetch('/reset')
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-    });
-}
-</script>
+        #canvas {
+            display: none;
+        }
 
+        .status-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .status-real { color: #10b981; }
+        .status-spoof { color: #ef4444; }
+        .status-waiting { color: #f59e0b; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔒 Face Anti-Spoofing System</h1>
+            <p>Cloud-Enabled Real-time Detection</p>
+        </header>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>📹 Camera Feed</h2>
+                <div class="error-message" id="error-msg"></div>
+                <video id="video" autoplay></video>
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>📊 Detection Status</h2>
+                <div id="status-display" class="status-value status-waiting">
+                    <span class="indicator" style="background: #f59e0b;"></span>
+                    WAITING
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-blinks">0</div>
+                        <div class="stat-label">Total Blinks</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="recent-blinks">0</div>
+                        <div class="stat-label">Recent Blinks</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="real-count">0</div>
+                        <div class="stat-label">Real Detections</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="spoof-count">0</div>
+                        <div class="stat-label">Spoof Detections</div>
+                    </div>
+                </div>
+
+                <div class="stat-box" style="margin-top: 15px;">
+                    <div class="stat-label">Session Duration</div>
+                    <div class="stat-number" style="font-size: 1.5em;" id="session-time">0s</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startCamera()">📷 Start Camera</button>
+                <button class="btn btn-danger" onclick="resetSystem()">♻️ Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const sessionId = 'session_' + Date.now();
+        let processingActive = false;
+
+        // Start camera
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: 640, 
+                        height: 480 
+                    } 
+                });
+                video.srcObject = stream;
+                
+                // Start processing after 1 second
+                setTimeout(() => {
+                    processingActive = true;
+                    processFrame();
+                }, 1000);
+                
+                document.getElementById('error-msg').style.display = 'none';
+            } catch (err) {
+                const errorMsg = document.getElementById('error-msg');
+                errorMsg.textContent = '❌ Camera access denied. Please allow camera permissions.';
+                errorMsg.style.display = 'block';
+                console.error('Camera error:', err);
+            }
+        }
+
+        // Process frame
+        async function processFrame() {
+            if (!processingActive) return;
+
+            // Set canvas size to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw current frame to canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert canvas to base64
+            const imageData = canvas.toDataURL('image/jpeg', 0.8);
+
+            // Send to server
+            try {
+                const response = await fetch('/process_frame', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: imageData,
+                        session_id: sessionId
+                    })
+                });
+
+                const data = await response.json();
+                updateUI(data);
+            } catch (error) {
+                console.error('Processing error:', error);
+            }
+
+            // Process next frame (5 FPS to reduce server load)
+            setTimeout(processFrame, 200);
+        }
+
+        // Update UI
+        function updateUI(data) {
+            const statusDisplay = document.getElementById('status-display');
+            const indicator = statusDisplay.querySelector('.indicator');
+
+            // Update status
+            if (data.status === 'REAL PERSON') {
+                statusDisplay.className = 'status-value status-real';
+                indicator.style.background = '#10b981';
+            } else if (data.status === 'SPOOF DETECTED') {
+                statusDisplay.className = 'status-value status-spoof';
+                indicator.style.background = '#ef4444';
+            } else {
+                statusDisplay.className = 'status-value status-waiting';
+                indicator.style.background = '#f59e0b';
+            }
+
+            statusDisplay.innerHTML = '';
+            statusDisplay.appendChild(indicator);
+            statusDisplay.innerHTML += data.status;
+
+            // Update stats
+            document.getElementById('total-blinks').textContent = data.total_blinks || 0;
+            document.getElementById('recent-blinks').textContent = data.recent_blinks || 0;
+            document.getElementById('real-count').textContent = data.real_count || 0;
+            document.getElementById('spoof-count').textContent = data.spoof_count || 0;
+            document.getElementById('session-time').textContent = (data.session_duration || 0) + 's';
+        }
+
+        // Reset system
+        async function resetSystem() {
+            try {
+                const response = await fetch(`/reset?session_id=${sessionId}`);
+                const data = await response.json();
+                alert(data.message);
+                
+                // Reset UI
+                document.getElementById('total-blinks').textContent = '0';
+                document.getElementById('recent-blinks').textContent = '0';
+                document.getElementById('real-count').textContent = '0';
+                document.getElementById('spoof-count').textContent = '0';
+                
+                const statusDisplay = document.getElementById('status-display');
+                statusDisplay.className = 'status-value status-waiting';
+                statusDisplay.querySelector('.indicator').style.background = '#f59e0b';
+                statusDisplay.innerHTML = '<span class="indicator" style="background: #f59e0b;"></span>WAITING';
+            } catch (error) {
+                console.error('Reset error:', error);
+            }
+        }
+
+        // Instructions
+        console.log('%c📹 Click "Start Camera" to begin detection', 'font-size: 16px; color: #667eea;');
+        console.log('%c✅ Blink 2+ times for REAL detection', 'font-size: 14px; color: #10b981;');
+        console.log('%c❌ Show photo/stay still for SPOOF detection', 'font-size: 14px; color: #ef4444;');
+    </script>
 </body>
 </html>
