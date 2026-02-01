@@ -76,7 +76,7 @@ def check_blink_validity(blink_history):
 @app.route('/')
 def index():
     """Render main page"""
-    return render_template('index_cloud.html')
+    return render_template('index.html')
 
 @app.route('/process_frame', methods=['POST'])
 def process_frame():
@@ -198,3 +198,4 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     logger.info("Cloud Face Anti-Spoofing System Started")
     app.run(host='0.0.0.0', port=port)
+
